@@ -1,0 +1,47 @@
+@import '../../assets/css/triangle.less';
+.HeaderWrap{
+    height: 80px;
+    line-height: 80px;
+    background-color: #fff;
+    .header_top{
+        height: 40px;
+        line-height: 40px;
+        text-align: right;
+        border-bottom: 1px solid #1da57a;
+        padding-right: 30px;
+        span{
+            margin-right: 10px;
+        }
+    }
+    .header_bottom{
+        height: 40px;
+        display: flex;
+        align-items: center;
+        .header_bottom_left{
+            position: relative;
+            text-align: center;
+            width: 25%;
+            font-size: 20px;
+            &::after{
+                content: '';
+                position: absolute;
+                .sjx(B,20px,#fff);
+                left: 50%;
+                transform: translateX(-50%);
+                top: 58px;
+            }
+        }
+        .header_bottom_right{
+            width: 75%;
+            text-align: right;
+            margin-right: 30px;
+            img{
+                width: 30px;
+                height: 20px;
+                margin: 0px 20px;
+                margin-top: -3px;
+            }
+        }
+
+    }
+}

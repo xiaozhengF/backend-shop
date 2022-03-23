@@ -1,0 +1,23 @@
+//@_表示，不管上下左右都带上这个固定的样式
+.sjx(@_,@w:30px,@c:red){
+    width: 0px;
+    height:0px;
+    overflow: hidden;//IE开始haslayout
+    border-style: solid;
+}
+.sjx(T,@w:30px,@c:red){
+    border-width: @w;
+    border-color: transparent transparent @c transparent;
+}
+.sjx(L,@w:30px,@c:red){
+    border-width: @w;
+    border-color: transparent transparent transparent @c;
+}
+.sjx(R,@w:30px,@c:red){
+    border-width: @w;
+    border-color: transparent @c transparent transparent;
+}
+.sjx(B,@w:30px,@c:red){
+    border-width: @w;
+    border-color: @c transparent transparent transparent;
+}
