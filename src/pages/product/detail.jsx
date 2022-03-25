@@ -63,7 +63,7 @@ export default function Detail() {
               imgs.map((img,i) => (
                 <img
                   key={img}
-                  src={`http://localhost:5002/upload/小猪佩奇${(i+1)}.jpeg`}
+                  src={`http://localhost:5002/upload/${img}`}
                   className="product-img"
                   alt="img"
                 />

@@ -94,7 +94,6 @@ export default function ProductHome() {
     }
   }
   useEffect(()=>{
-    console.log('home mounted');
     getProductList()
   },[pageSize,pageNum])
   const title= (
@@ -104,7 +103,7 @@ export default function ProductHome() {
         <Option value='productDesc'>按描述搜索</Option>
       </Select>
       <Input placeholder='关键字' allowClear  style={{width:150,margin:'0 15px'}} onChange={(e)=>setSearchName(e.target.value)} value={searchName}></Input>
-      <Button type='primary'onClick={()=>getProductList()}>查找</Button>
+      <Button type='primary' onClick={()=>getProductList()}>查找</Button>
     </span>
   )
   return (

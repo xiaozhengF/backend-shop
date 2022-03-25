@@ -7,15 +7,19 @@ import {
   Cascader,
   message
 } from 'antd'
+import PicturesWall from '../../components/PictureWall'
+import EditorConvertToHTML from '../../components/EditorConvertToHTML'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import LinkButton from '../../components/LinkButton'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { reqCategorys } from '../../api'
+import { reqCategorys,reqAddOrUpdateProduct } from '../../api'
 const { Item } = Form
 const { TextArea } = Input
 export default function Addupdate() {
   let parentId = '0'
   const formRef = useRef()
+  const PW=useRef()
+  const RTE=useRef()
   const [options, setOptions] = useState([])
   const [categoryIds, setCategoryIds] = useState([])
   const navigate = useNavigate()
@@ -31,14 +35,9 @@ export default function Addupdate() {
     </span>
   )
   const formItemLayout = {
-    labelCol: {
-      offset: 0,
-      span: 2
-    },
-    wrapperCol: {
-      span: 8
-    },
-  };
+    labelCol: { span: 2 },  // 左侧label的宽度
+    wrapperCol: { span: 8 }, // 右侧包裹的宽度
+  }
   function validatePrice(_, value) {
     if (value * 1 > 0) {
       return Promise.resolve()
@@ -47,8 +46,31 @@ export default function Addupdate() {
   }
   function handleSubmit() {
     const { current: addUpdateForm } = formRef
-    addUpdateForm.validateFields().then(() => {
-      message.success('表单校验成功！！')
+    const {current:PWObj}=PW
+    const {current:RTEObj}=RTE
+    addUpdateForm.validateFields().then(async (value) => {
+      const product={...value}
+      if(value.categoryIds.length===1){
+        product.pCategoryId='0'
+        product.categoryId=value.categoryIds[0]
+      }else{
+        product.pCategoryId=value.categoryIds[0]
+        product.categoryId=value.categoryIds[1]
+      }
+      product.imgs=PWObj.getImgs()
+      product.detail=RTEObj.getEditorContent()
+      if(isUpdate){
+        product._id=productObj._id
+      }
+      delete product.categoryIds
+      const result=await reqAddOrUpdateProduct(product)
+      if(result.status===0){
+        navigate(-1)
+        message.success(`商品${isUpdate?"更新":"添加"}成功`)
+      }else{
+        message.error(`商品${isUpdate?"更新":"添加"}失败`)
+      }
+
     }).catch((errinfo) => {
       console.log(errinfo);
     })
@@ -78,7 +100,6 @@ export default function Addupdate() {
       isLeaf: false
     }))
     const {pCategoryId,categoryId}=productObj
-    const { current: addUpdateForm } = formRef
     if(isUpdate) {
       if(pCategoryId!=='0'){
       setCategoryIds([pCategoryId,categoryId])
@@ -116,7 +137,6 @@ export default function Addupdate() {
     }
   }
   useEffect(() => {
-    console.log('addupdate mounted');
     getCategorys()
     return () => {
     }
@@ -158,10 +178,21 @@ export default function Addupdate() {
           <Input type='number' addonAfter='元' placeholder='请输入商品价格'></Input>
         </Item>
         <Item label='商品分类' name='categoryIds'
+          rules={[
+            { required: true, message: "必须输入商品分类" },
+          ]}
         >
-          <Cascader options={options} loadData={loadData} changeOnSelect />
+          <Cascader options={options} loadData={loadData} changeOnSelect placeholder='请输入商品分类'/>
         </Item>
-        <Item>
+        <Item label='商品图片' name='imgs'
+        >
+          <PicturesWall ref={PW} imgs={productObj.imgs}/>
+        </Item>
+        <Item label='商品详情' name='detail'
+        >
+          <EditorConvertToHTML detail={productObj.detail} ref={RTE}/>
+        </Item>
+        <Item  labelCol={{span: 2}} wrapperCol={{span: 20}}>
           <Button type='primary' onClick={handleSubmit}>提交</Button>
         </Item>
       </Form>

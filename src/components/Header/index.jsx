@@ -25,7 +25,7 @@ export default function Header(props) {
       else {
         if (menuObj.children) {
           const cmenuObj = menuObj.children.find(cmenuObj => {
-            return cmenuObj.key === pathname
+            return pathname.indexOf(cmenuObj.key)===0
           })
           if (cmenuObj) title = cmenuObj.title
         }

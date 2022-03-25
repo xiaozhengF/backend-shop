@@ -15,3 +15,6 @@ export const reqProductList =(pageSize,pageNum) => ajax(BASE + '/manage/product/
 export const reqSearchProductList =({pageSize,pageNum,searchName,searchType}) => ajax(BASE + '/manage/product/search',{pageSize,pageNum,[searchType]:searchName})
 export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', {productId, status}, 'POST')
 export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', {categoryId})
+export const reqAddProduct = ({categoryId,pCategoryId,name,desc,price,detail,imgs}) => ajax(BASE + '/manage/product/add', {categoryId,pCategoryId,name,desc,price,detail,imgs},'POST')
+export const reqdeleteImg = (name) => ajax(BASE + '/manage/img/delete', {name},'POST')
+export const reqAddOrUpdateProduct = (product) => ajax(BASE + '/manage/product/'+(product._id?'update':'add'), product,'POST')
